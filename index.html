@@ -1,0 +1,936 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" class="dark scroll-smooth">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+<meta name="theme-color" content="#12100D">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="description" content="مطعم الأمير - مشويات، طواجن، بيتزا، كريب، فطير وأكثر. تحت إدارة الشيف أمير بدر والشيف محمد بدر. توصيل سريع لجميع المناطق.">
+<title>مطعم الأمير | الشيف أمير بدر</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&family=Marhey:wght@400;600;700&display=swap" rel="stylesheet">
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    darkMode: 'class',
+    theme: {
+      extend: {
+        fontFamily: {
+          cairo: ['Cairo', 'sans-serif'],
+          marhey: ['Marhey', 'sans-serif'],
+        },
+        colors: {
+          brand: {
+            ember: '#B3241C',
+            emberBright: '#E23B24',
+            gold: '#C9A24B',
+            goldBright: '#E4C572',
+            char: '#12100D',
+            charCard: '#1C1815',
+            charCard2: '#221D18',
+            cream: '#FBF4E8',
+            creamCard: '#FFFFFF',
+            creamBg: '#F4ECDC',
+          }
+        },
+        boxShadow: {
+          ember: '0 10px 40px -10px rgba(179,36,28,0.45)',
+          gold: '0 10px 40px -10px rgba(201,162,75,0.35)',
+        }
+      }
+    }
+  }
+</script>
+
+<style>
+  :root{ --grain-opacity: 0.05; }
+
+  * { transition: background-color .3s ease, border-color .3s ease, color .3s ease, box-shadow .3s ease; }
+  html, body { max-width: 100%; overflow-x: hidden; scrollbar-gutter: stable; }
+  img, video, iframe { max-width: 100%; height: auto; }
+  body { font-family:'Cairo',sans-serif; }
+
+  /* subtle ember grain texture overlay */
+  .grain::before{
+    content:"";
+    position:fixed; inset:0; z-index:1; pointer-events:none;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.4'/%3E%3C/svg%3E");
+    opacity: var(--grain-opacity);
+    mix-blend-mode: overlay;
+  }
+
+  /* ===== Loader: glowing ember seal ===== */
+  @keyframes emberPulse {
+    0%,100% { box-shadow: 0 0 0 0 rgba(226,59,36,0.55), 0 0 60px 10px rgba(201,162,75,0.25); transform: scale(1); }
+    50% { box-shadow: 0 0 0 18px rgba(226,59,36,0), 0 0 80px 20px rgba(201,162,75,0.4); transform: scale(1.03); }
+  }
+  @keyframes emberSpin { to { transform: rotate(360deg); } }
+  .ember-ring{
+    animation: emberSpin 3.5s linear infinite;
+    background: conic-gradient(from 0deg, #E23B24, #C9A24B, #B3241C, #E4C572, #E23B24);
+  }
+  .ember-core{ animation: emberPulse 2.2s ease-in-out infinite; }
+
+  @keyframes flicker {
+    0%,100%{ opacity:1; } 45%{ opacity:.85; } 50%{ opacity:1; } 72%{ opacity:.9; }
+  }
+  .flicker{ animation: flicker 3s ease-in-out infinite; }
+
+  h1,h2,h3 { text-shadow: 0 2px 20px rgba(0,0,0,0.12); }
+  .dark h1, .dark h2, .dark h3 { text-shadow: 0 3px 26px rgba(0,0,0,0.55); }
+
+  .menu-card{
+    box-shadow: 0 4px 24px rgba(0,0,0,0.06), 0 1.5px 6px rgba(179,36,28,0.04);
+  }
+  .dark .menu-card{ box-shadow: 0 8px 36px rgba(0,0,0,0.45), 0 2px 10px rgba(201,162,75,0.06); }
+  .menu-card:hover{ box-shadow: 0 16px 46px rgba(0,0,0,0.14), 0 6px 20px rgba(179,36,28,0.15) !important; }
+  .dark .menu-card:hover{ box-shadow: 0 18px 54px rgba(0,0,0,0.6), 0 6px 24px rgba(201,162,75,0.2) !important; }
+
+  header{ box-shadow: 0 2px 24px rgba(0,0,0,0.07); }
+  .dark header{ box-shadow: 0 2px 30px rgba(0,0,0,0.45); }
+
+  .gold-text{ background: linear-gradient(120deg,#E4C572,#C9A24B 45%,#8f6f2b 55%,#E4C572); background-size:200% auto; background-clip:text; -webkit-background-clip:text; color:transparent; filter: drop-shadow(0 2px 10px rgba(201,162,75,0.28)); }
+
+  @keyframes modalFadeIn{ from{opacity:0; transform:scale(.92) translateY(16px);} to{opacity:1; transform:scale(1) translateY(0);} }
+  .modal-animate-in{ animation: modalFadeIn .45s cubic-bezier(.175,.885,.32,1.275) forwards; }
+
+  @media (max-width:400px){ html{font-size:14px;} }
+  @media (min-width:1280px){ .max-w-7xl{max-width:1280px;} }
+  @media (max-width:640px){ button, a[href]{min-height:44px;} }
+
+  /* seal watermark used as a recurring signature motif */
+  .seal-mark{ background-image:url('assets/images/logo.png'); background-size:contain; background-repeat:no-repeat; background-position:center; }
+
+  ::-webkit-scrollbar{ width:10px; }
+  ::-webkit-scrollbar-track{ background:transparent; }
+  ::-webkit-scrollbar-thumb{ background:#C9A24B55; border-radius:10px; }
+
+  .category-scroll::-webkit-scrollbar{ display:none; }
+  .category-scroll{ -ms-overflow-style:none; scrollbar-width:none; }
+
+  .badge-hot{ background:linear-gradient(120deg,#E23B24,#B3241C); }
+</style>
+</head>
+<body class="grain font-cairo bg-brand-creamBg text-stone-800 dark:bg-brand-char dark:text-stone-100 min-h-screen relative">
+
+<!-- ================= شاشة التحميل ================= -->
+<div id="loader" class="fixed inset-0 bg-brand-char z-[9999] flex flex-col justify-center items-center">
+  <div class="relative w-40 h-40 flex items-center justify-center">
+    <div class="ember-ring absolute w-40 h-40 rounded-full blur-md opacity-70"></div>
+    <div class="ember-core absolute w-32 h-32 rounded-full bg-brand-char border border-brand-gold/30 flex items-center justify-center">
+      <span class="text-brand-gold font-marhey font-bold text-4xl tracking-widest">أ</span>
+    </div>
+  </div>
+  <p class="text-brand-gold mt-7 text-lg font-bold flicker tracking-wide">جاري إعداد أشهى الأطباق...</p>
+</div>
+
+<!-- ================= شاشة الترحيب ================= -->
+<div id="welcome-modal" class="fixed inset-0 z-[999] flex items-center justify-center bg-black/85 backdrop-blur-md hidden transition-opacity duration-500">
+  <div class="bg-white dark:bg-brand-charCard border border-brand-gold/30 rounded-3xl p-8 md:p-10 max-w-md w-[92%] text-center shadow-2xl modal-animate-in relative overflow-hidden" id="welcome-card">
+    <div class="absolute -top-10 -left-10 w-40 h-40 rounded-full bg-brand-ember/10 blur-2xl"></div>
+    <div class="w-20 h-20 bg-brand-gold/10 text-brand-gold rounded-full flex items-center justify-center mx-auto mb-5 text-4xl shadow-lg shadow-brand-gold/10 relative">
+      👑
+    </div>
+    <h3 class="text-2xl md:text-3xl font-extrabold mb-2 text-stone-900 dark:text-white relative">الشيف أمير يرحب بكم</h3>
+    <p class="text-stone-500 dark:text-stone-400 text-sm md:text-base mb-6 leading-relaxed relative">
+      يشرفنا زيارتك لمطعم الأمير. بماذا تحب أن ننادك؟
+    </p>
+
+    <div class="relative mb-5">
+      <input
+        type="text"
+        id="visitor-name-input"
+        placeholder="اكتب اسمك الكريم هنا..."
+        autocomplete="given-name"
+        class="w-full text-center p-4 rounded-2xl border-2 border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-800 text-stone-900 dark:text-white focus:outline-none focus:border-brand-gold text-lg font-semibold transition-all placeholder:text-stone-400"
+      >
+      <span class="absolute left-4 top-1/2 -translate-y-1/2 text-brand-gold text-xl opacity-70">🔥</span>
+    </div>
+
+    <div class="flex flex-col sm:flex-row gap-3 justify-center relative">
+      <button
+        onclick="saveVisitorName()"
+        class="bg-gradient-to-l from-brand-gold to-brand-goldBright hover:brightness-110 text-black font-bold px-6 py-3.5 rounded-2xl w-full transition-all hover:scale-105 active:scale-95 shadow-xl shadow-brand-gold/25 text-base"
+      >
+        ✅ تأكيد ودخول للموقع
+      </button>
+      <button
+        onclick="skipWelcomeModal()"
+        class="text-stone-400 hover:text-stone-600 dark:hover:text-stone-300 text-sm px-4 py-3 transition-colors underline underline-offset-4"
+      >
+        تخطي
+      </button>
+    </div>
+    <p class="text-stone-400 dark:text-stone-500 text-xs mt-4 relative">يمكنك التخطي وسيتم مناداتك بـ "زائرنا الكريم"</p>
+  </div>
+</div>
+
+<!-- ================= التنبيهات ================= -->
+<div id="custom-toast" class="fixed top-24 left-1/2 -translate-x-1/2 z-[1001] bg-brand-ember text-white px-6 py-4 rounded-2xl shadow-2xl flex items-center gap-3 transform -translate-y-20 opacity-0 pointer-events-none transition-all duration-300 max-w-[90%]">
+  <span class="text-xl">⚠️</span>
+  <span id="toast-message" class="font-bold">يرجى ملء الحقول المطلوبة!</span>
+</div>
+
+<!-- ================= أزرار عائمة ================= -->
+<div class="fixed bottom-6 left-6 z-[90] flex flex-col gap-3">
+  <button onclick="toggleTheme()" class="w-12 h-12 rounded-full bg-white dark:bg-brand-charCard text-stone-800 dark:text-brand-gold border border-stone-200 dark:border-stone-700 shadow-xl flex items-center justify-center text-xl hover:scale-110 active:scale-95 transition-all" title="تبديل الوضع">
+    <span class="dark:hidden">🌙</span>
+    <span class="hidden dark:inline">☀️</span>
+  </button>
+  <a href="https://wa.me/201110109388" target="_blank" class="flex items-center gap-2 bg-[#25D366] text-white px-5 py-3 rounded-full font-bold shadow-lg shadow-green-500/30 hover:scale-105 active:scale-95 transition-all text-sm md:text-base relative">
+    <span class="absolute -top-1 -right-1 w-3 h-3 bg-green-300 rounded-full animate-ping"></span>
+    <span class="absolute -top-1 -right-1 w-3 h-3 bg-green-400 rounded-full"></span>
+    <span class="text-xl">💬</span>
+    <span>اطلب دليفري</span>
+  </a>
+</div>
+
+<!-- ================= الهيدر ================= -->
+<header class="fixed top-0 w-full z-50 bg-brand-cream/85 dark:bg-brand-char/85 backdrop-blur-xl border-b border-stone-200/50 dark:border-stone-800/50">
+  <nav class="max-w-7xl mx-auto px-4 md:px-6 py-3 flex justify-between items-center">
+    <a href="#home" class="flex items-center gap-2.5">
+      <img src="assets/images/logo.png" alt="شعار مطعم الأمير" class="w-11 h-11 md:w-12 md:h-12 rounded-full object-cover border-2 border-brand-gold/60 shadow-gold" onerror="this.src='https://images.unsplash.com/photo-1552566626-52f8b828add9?w=100&h=100&fit=crop'">
+      <span class="text-xl md:text-2xl font-black tracking-wide text-stone-900 dark:text-white">مطعم <span class="gold-text">الأمير</span> 👑</span>
+    </a>
+
+    <ul class="hidden lg:flex items-center gap-7 font-semibold text-sm">
+      <li><a href="#home" class="hover:text-brand-ember dark:hover:text-brand-gold transition-colors">الرئيسية</a></li>
+      <li><a href="#menu" class="hover:text-brand-ember dark:hover:text-brand-gold transition-colors">المنيو</a></li>
+      <li><a href="#about" class="hover:text-brand-ember dark:hover:text-brand-gold transition-colors">من نحن</a></li>
+      <li><a href="#reviews" class="hover:text-brand-ember dark:hover:text-brand-gold transition-colors">آراء العملاء</a></li>
+      <li><a href="#order" class="bg-gradient-to-l from-brand-ember to-brand-emberBright text-white font-bold px-5 py-2.5 rounded-full hover:brightness-110 transition-all shadow-ember">طلب دليفري</a></li>
+    </ul>
+
+    <div id="header-user-badge" class="hidden lg:flex items-center gap-2 text-sm font-bold bg-brand-gold/10 text-brand-gold px-4 py-2 rounded-full border border-brand-gold/25" style="box-shadow: 0 2px 16px rgba(201,162,75,0.15);">
+      <span>مرحباً بك</span>
+    </div>
+
+    <button onclick="toggleMobileMenu()" class="lg:hidden flex flex-col justify-between w-6 h-5 text-stone-900 dark:text-white" id="hamburger-btn" aria-label="القائمة">
+      <span class="w-full h-0.5 bg-current rounded"></span>
+      <span class="w-full h-0.5 bg-current rounded"></span>
+      <span class="w-full h-0.5 bg-current rounded"></span>
+    </button>
+  </nav>
+
+  <div id="mobile-menu" class="hidden lg:hidden bg-brand-cream dark:bg-brand-charCard border-b border-stone-200 dark:border-stone-800 absolute top-full left-0 w-full p-6 space-y-4 shadow-xl">
+    <div id="mobile-user-badge" class="hidden text-sm font-bold bg-brand-gold/10 text-brand-gold px-4 py-2.5 rounded-xl border border-brand-gold/25 text-center"></div>
+    <a href="#home" onclick="toggleMobileMenu()" class="block font-semibold hover:text-brand-gold py-2 border-b border-stone-100 dark:border-stone-800">الرئيسية</a>
+    <a href="#menu" onclick="toggleMobileMenu()" class="block font-semibold hover:text-brand-gold py-2 border-b border-stone-100 dark:border-stone-800">المنيو</a>
+    <a href="#about" onclick="toggleMobileMenu()" class="block font-semibold hover:text-brand-gold py-2 border-b border-stone-100 dark:border-stone-800">من نحن</a>
+    <a href="#reviews" onclick="toggleMobileMenu()" class="block font-semibold hover:text-brand-gold py-2 border-b border-stone-100 dark:border-stone-800">آراء العملاء</a>
+    <a href="#contact" onclick="toggleMobileMenu()" class="block font-semibold hover:text-brand-gold py-2 border-b border-stone-100 dark:border-stone-800">تواصل معنا</a>
+    <div class="pt-2">
+      <a href="#order" onclick="toggleMobileMenu()" class="block text-center bg-gradient-to-l from-brand-ember to-brand-emberBright text-white font-bold py-3 rounded-xl shadow-lg">اطلب دليفري الآن</a>
+    </div>
+  </div>
+</header>
+
+<!-- ================= البطل الرئيسي ================= -->
+<section class="min-h-screen flex items-center justify-center relative pt-24 overflow-hidden" id="home">
+  <div class="absolute inset-0 z-0">
+    <img src="assets/images/grills.jpg" alt="مشويات مطعم الأمير" class="w-full h-full object-cover" onerror="this.src='https://images.unsplash.com/photo-1529193591184-b1d58069ecdd?w=1600&q=80'">
+    <div class="absolute inset-0 bg-gradient-to-b from-brand-char/85 via-brand-char/75 to-brand-char"></div>
+    <div class="absolute inset-0 bg-gradient-to-t from-brand-ember/20 via-transparent to-transparent"></div>
+    <div class="seal-mark absolute -bottom-24 -left-24 w-96 h-96 opacity-[0.06] rotate-12"></div>
+  </div>
+
+  <div class="max-w-4xl mx-auto px-6 text-center relative z-10 py-16">
+    <div id="hero-welcome-badge" class="inline-flex items-center gap-2 bg-white/5 border border-brand-gold/30 backdrop-blur-sm px-4 py-2 rounded-full text-xs md:text-sm font-semibold mb-6 text-brand-goldBright">
+      <span>مرحباً بالزوار الكرام في مطعم الأمير</span>
+    </div>
+
+    <h1 class="text-4xl md:text-7xl font-black leading-tight tracking-tight mb-6 text-white">
+      نحن لا ندعي الجودة<span class="text-brand-gold">..</span><br class="hidden md:block">
+      <span class="gold-text">بل نصنعها</span>
+    </h1>
+
+    <p class="text-base md:text-xl text-stone-300 leading-relaxed max-w-2xl mx-auto mb-10 font-light">
+      تحت إدارة الشيف <strong class="text-brand-goldBright font-bold">أمير بدر</strong> والشيف <strong class="text-brand-goldBright font-bold">محمد بدر</strong> — مشويات على الفحم، طواجن بيتي، بيتزا وكريب وفطير طازج، وصواني عائلية.. علامة الجودة منذ أول لقمة.
+    </p>
+
+    <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+      <a href="#menu" class="w-full sm:w-auto bg-gradient-to-l from-brand-gold to-brand-goldBright hover:brightness-110 text-black font-bold px-8 py-4 rounded-full text-lg shadow-gold hover:scale-105 active:scale-95 transition-all">📋 تصفح المنيو الآن</a>
+      <a href="https://wa.me/201110109388" target="_blank" class="w-full sm:w-auto bg-white/5 border border-white/20 hover:bg-white/10 text-white font-bold px-8 py-4 rounded-full text-lg transition-all hover:scale-105 backdrop-blur-sm">🛵 اطلب دليفري سريع</a>
+    </div>
+
+    <div class="mt-14 grid grid-cols-3 gap-4 md:gap-8 max-w-xl mx-auto text-stone-300">
+      <div>
+        <div class="text-2xl md:text-4xl font-black text-brand-gold">+15</div>
+        <div class="text-[11px] md:text-sm mt-1">قسم متنوع بالمنيو</div>
+      </div>
+      <div class="border-x border-white/10">
+        <div class="text-2xl md:text-4xl font-black text-brand-gold">فحم</div>
+        <div class="text-[11px] md:text-sm mt-1">مشويات على الفحم الطبيعي</div>
+      </div>
+      <div>
+        <div class="text-2xl md:text-4xl font-black text-brand-gold">سريع</div>
+        <div class="text-[11px] md:text-sm mt-1">توصيل لجميع المناطق</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= من نحن ================= -->
+<section class="py-16 md:py-24 bg-brand-cream dark:bg-brand-charCard/40 relative overflow-hidden" id="about">
+  <div class="seal-mark absolute top-10 -right-16 w-72 h-72 opacity-[0.04] dark:opacity-[0.05]"></div>
+  <div class="max-w-6xl mx-auto px-6 relative">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 md:gap-14 items-center">
+      <div class="lg:col-span-5 order-2 lg:order-1">
+        <div class="relative rounded-[2rem] overflow-hidden shadow-2xl aspect-[3/4]">
+          <img src="assets/images/chef-amir.jpg" alt="الشيف أمير بدر" class="w-full h-full object-cover" onerror="this.src='https://images.unsplash.com/photo-1577219491135-ce391730fb2c?w=800&q=80'">
+          <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+          <div class="absolute bottom-5 right-5 text-white">
+            <div class="text-xl font-black">الشيف أمير بدر</div>
+            <div class="text-sm text-brand-goldBright font-semibold">مؤسس مطعم الأمير</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="lg:col-span-7 order-1 lg:order-2 text-center lg:text-right">
+        <span class="text-brand-ember dark:text-brand-gold font-bold text-sm uppercase tracking-widest block mb-2">من نحن</span>
+        <h2 class="text-3xl md:text-5xl font-extrabold text-stone-900 dark:text-white mb-6">الشيف أمير.. علامة الجودة</h2>
+
+        <div class="space-y-5 text-base md:text-lg text-stone-600 dark:text-stone-300 leading-relaxed">
+          <p>
+            مطعم الأمير تحت إدارة الشيف <strong class="text-brand-ember dark:text-brand-gold">أمير بدر</strong> والشيف <strong class="text-brand-ember dark:text-brand-gold">محمد بدر</strong>، وجهتك لأشهى المشويات والطواجن والوجبات البيتي في أجواء نظيفة واحترافية بالكامل.
+          </p>
+          <p>
+            جودة الأكل، وأجود أنواع الخامات الطازجة، ونظافة تامة في كل خطوة من خطوات التحضير.. هذه أولويتنا القصوى قبل أي شيء آخر.
+          </p>
+          <p>
+            سر مطبخ الأمير ليس فقط في الوصفة، بل في الشغف الحقيقي بالطبخ، والضيافة الدافئة، واحترام كل عميل يشرفنا بزيارته.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-8">
+          <div class="bg-white dark:bg-brand-charCard border border-stone-200 dark:border-stone-800 rounded-2xl p-4 text-center">
+            <div class="text-2xl mb-1">🌿</div>
+            <div class="text-xs font-bold">خامات طازجة</div>
+          </div>
+          <div class="bg-white dark:bg-brand-charCard border border-stone-200 dark:border-stone-800 rounded-2xl p-4 text-center">
+            <div class="text-2xl mb-1">🔥</div>
+            <div class="text-xs font-bold">شوي على الفحم</div>
+          </div>
+          <div class="bg-white dark:bg-brand-charCard border border-stone-200 dark:border-stone-800 rounded-2xl p-4 text-center">
+            <div class="text-2xl mb-1">✨</div>
+            <div class="text-xs font-bold">نظافة تامة</div>
+          </div>
+          <div class="bg-white dark:bg-brand-charCard border border-stone-200 dark:border-stone-800 rounded-2xl p-4 text-center">
+            <div class="text-2xl mb-1">🛵</div>
+            <div class="text-xs font-bold">توصيل سريع</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= المنيو التفاعلي ================= -->
+<section class="py-16 md:py-24 max-w-7xl mx-auto px-4 md:px-6 relative" id="menu">
+  <div class="text-center max-w-3xl mx-auto mb-10 md:mb-12">
+    <span class="text-brand-ember dark:text-brand-gold font-bold text-sm uppercase tracking-widest block mb-2">قائمتنا الكاملة</span>
+    <h2 class="text-3xl md:text-5xl font-extrabold text-stone-900 dark:text-white mb-2">المنيو</h2>
+    <div class="w-16 h-1 bg-gradient-to-l from-brand-ember to-brand-gold mx-auto rounded-full"></div>
+  </div>
+
+  <div class="category-scroll flex overflow-x-auto lg:flex-wrap lg:justify-center gap-2.5 mb-10 md:mb-12 pb-2 -mx-4 px-4 lg:mx-0 lg:px-0">
+    <button onclick="filterMenu('all', event)" class="menu-filter-btn active shrink-0 bg-gradient-to-l from-brand-ember to-brand-emberBright text-white font-bold px-5 py-2.5 rounded-full text-sm shadow-md transition-all whitespace-nowrap">🍽️ الكل</button>
+    <button onclick="filterMenu('grills', event)" class="menu-filter-btn shrink-0 bg-white dark:bg-brand-charCard border border-stone-200 dark:border-stone-800 px-5 py-2.5 rounded-full text-sm font-semibold transition-all whitespace-nowrap">🔥 المشويات</button>
+    <button onclick="filterMenu('tajines', event)" class="menu-filter-btn shrink-0 bg-white dark:bg-brand-charCard border border-stone-200 dark:border-stone-800 px-5 py-2.5 rounded-full text-sm font-semibold transition-all whitespace-nowrap">🍲 قسم المطبخ</button>
+    <button onclick="filterMenu('meals', event)" class="menu-filter-btn shrink-0 bg-white dark:bg-brand-charCard border border-stone-200 dark:border-stone-800 px-5 py-2.5 rounded-full text-sm font-semibold transition-all whitespace-nowrap">🍛 الوجبات</button>
+    <button onclick="filterMenu('trays', event)" class="menu-filter-btn shrink-0 bg-white dark:bg-brand-charCard border border-stone-200 dark:border-stone-800 px-5 py-2.5 rounded-full text-sm font-semibold transition-all whitespace-nowrap">🥘 الصواني</button>
+    <button onclick="filterMenu('sandwiches', event)" class="menu-filter-btn shrink-0 bg-white dark:bg-brand-charCard border border-stone-200 dark:border-stone-800 px-5 py-2.5 rounded-full text-sm font-semibold transition-all whitespace-nowrap">🥙 السندوتشات</button>
+    <button onclick="filterMenu('pizza', event)" class="menu-filter-btn shrink-0 bg-white dark:bg-brand-charCard border border-stone-200 dark:border-stone-800 px-5 py-2.5 rounded-full text-sm font-semibold transition-all whitespace-nowrap">🍕 بيتزا</button>
+    <button onclick="filterMenu('feteer', event)" class="menu-filter-btn shrink-0 bg-white dark:bg-brand-charCard border border-stone-200 dark:border-stone-800 px-5 py-2.5 rounded-full text-sm font-semibold transition-all whitespace-nowrap">🥞 فطير</button>
+    <button onclick="filterMenu('crepe', event)" class="menu-filter-btn shrink-0 bg-white dark:bg-brand-charCard border border-stone-200 dark:border-stone-800 px-5 py-2.5 rounded-full text-sm font-semibold transition-all whitespace-nowrap">🌯 كريب</button>
+    <button onclick="filterMenu('potato', event)" class="menu-filter-btn shrink-0 bg-white dark:bg-brand-charCard border border-stone-200 dark:border-stone-800 px-5 py-2.5 rounded-full text-sm font-semibold transition-all whitespace-nowrap">🍟 ميكسات بطاطس</button>
+    <button onclick="filterMenu('appetizers', event)" class="menu-filter-btn shrink-0 bg-white dark:bg-brand-charCard border border-stone-200 dark:border-stone-800 px-5 py-2.5 rounded-full text-sm font-semibold transition-all whitespace-nowrap">🥗 مقبلات وإضافات</button>
+  </div>
+
+  <div id="menu-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+</section>
+
+<!-- ================= آراء العملاء ================= -->
+<section class="py-16 md:py-24 bg-brand-cream dark:bg-brand-charCard/40" id="reviews">
+  <div class="max-w-6xl mx-auto px-6">
+    <div class="text-center max-w-3xl mx-auto mb-10 md:mb-14">
+      <span class="text-brand-ember dark:text-brand-gold font-bold text-sm uppercase tracking-widest block mb-2">آراء عملائنا المتميزة</span>
+      <h2 class="text-3xl md:text-5xl font-extrabold text-stone-900 dark:text-white mb-2">إيه رأي الناس فينا؟</h2>
+      <div class="w-16 h-1 bg-gradient-to-l from-brand-ember to-brand-gold mx-auto rounded-full"></div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+      <div class="bg-white dark:bg-brand-charCard border border-stone-200 dark:border-stone-800 rounded-2xl p-5 shadow-sm">
+        <div class="flex items-center gap-3 mb-2">
+          <div class="w-10 h-10 rounded-full bg-gradient-to-br from-brand-gold to-brand-ember flex items-center justify-center text-white font-bold">م</div>
+          <div class="font-bold text-sm">محمود سعيد</div>
+        </div>
+        <p class="text-stone-600 dark:text-stone-300 text-sm leading-relaxed">خدمة ممتازة ودليفري سرعة وجودة فوق الوصف! 🚀👌</p>
+      </div>
+
+      <div class="bg-white dark:bg-brand-charCard border border-stone-200 dark:border-stone-800 rounded-2xl p-5 shadow-sm">
+        <div class="flex items-center gap-3 mb-2">
+          <div class="w-10 h-10 rounded-full bg-gradient-to-br from-brand-gold to-brand-ember flex items-center justify-center text-white font-bold">س</div>
+          <div class="font-bold text-sm">سارة أحمد</div>
+        </div>
+        <p class="text-stone-600 dark:text-stone-300 text-sm leading-relaxed mb-3">بجد عاش.. أداء وخدمة.. واخد أكل من عالم تاني! 🌌✨</p>
+        <div class="mr-6 pr-4 border-r-2 border-brand-gold/40">
+          <div class="flex items-center gap-2 mb-1">
+            <div class="w-7 h-7 rounded-full bg-gradient-to-br from-brand-ember to-brand-goldBright flex items-center justify-center text-white font-bold text-xs">ي</div>
+            <div class="font-bold text-xs">يوسف كامل</div>
+          </div>
+          <p class="text-stone-500 dark:text-stone-400 text-xs leading-relaxed">والطواجن من عالم تالت بجد 😂 بس تحفة والله!</p>
+        </div>
+      </div>
+
+      <div class="bg-white dark:bg-brand-charCard border border-stone-200 dark:border-stone-800 rounded-2xl p-5 shadow-sm">
+        <div class="flex items-center gap-3 mb-2">
+          <div class="w-10 h-10 rounded-full bg-gradient-to-br from-brand-gold to-brand-ember flex items-center justify-center text-white font-bold">ه</div>
+          <div class="font-bold text-sm">هبة الليثي</div>
+        </div>
+        <p class="text-stone-600 dark:text-stone-300 text-sm leading-relaxed">بحب المسابقات اللي أ. أمير بيعملها دايماً في الصفحة 🎉🎁</p>
+      </div>
+
+      <div class="bg-white dark:bg-brand-charCard border border-stone-200 dark:border-stone-800 rounded-2xl p-5 shadow-sm">
+        <div class="flex items-center gap-3 mb-2">
+          <div class="w-10 h-10 rounded-full bg-gradient-to-br from-brand-gold to-brand-ember flex items-center justify-center text-white font-bold">ع</div>
+          <div class="font-bold text-sm">عمر الشناوي</div>
+        </div>
+        <p class="text-stone-600 dark:text-stone-300 text-sm leading-relaxed">نفسي أكسب صينية من صواني الأمير الكبيرة بقا! 🤤😋</p>
+      </div>
+
+      <div class="bg-white dark:bg-brand-charCard border border-stone-200 dark:border-stone-800 rounded-2xl p-5 shadow-sm md:col-span-2">
+        <div class="flex items-center gap-3 mb-2">
+          <div class="w-10 h-10 rounded-full bg-gradient-to-br from-brand-gold to-brand-ember flex items-center justify-center text-white font-bold">ن</div>
+          <div class="font-bold text-sm">نور الدين فتحي</div>
+        </div>
+        <p class="text-stone-600 dark:text-stone-300 text-sm leading-relaxed">مطعم صح وأكله حلو يبقى الأمير بلا منازع! 👑</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= تواصل معنا ================= -->
+<section class="py-16 md:py-24 max-w-7xl mx-auto px-4 md:px-6" id="contact">
+  <div class="text-center max-w-3xl mx-auto mb-10 md:mb-14">
+    <span class="text-brand-ember dark:text-brand-gold font-bold text-sm uppercase tracking-widest block mb-2">ابقَ على تواصل</span>
+    <h2 class="text-3xl md:text-5xl font-extrabold text-stone-900 dark:text-white mb-2">تواصل معنا</h2>
+    <div class="w-16 h-1 bg-gradient-to-l from-brand-ember to-brand-gold mx-auto rounded-full"></div>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <div class="rounded-3xl overflow-hidden shadow-2xl border border-stone-200 dark:border-stone-800 h-80 lg:h-auto">
+      <iframe
+        src="https://www.google.com/maps?q=%D8%B4%D9%86%D8%B4%D9%88%D8%B1%20%D8%B3%D9%85%D8%A7%D8%AF%D9%88%D9%86%2C%20%D9%85%D8%B5%D8%B1&output=embed"
+        class="w-full h-full border-0" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="موقع مطعم الأمير">
+      </iframe>
+    </div>
+
+    <div class="space-y-5">
+      <a href="https://www.facebook.com/share/1HydJE6VF9/" target="_blank" class="block bg-gradient-to-l from-[#1877F2] to-[#0d5bc9] rounded-3xl p-6 md:p-8 text-white shadow-xl hover:scale-[1.02] transition-all">
+        <div class="flex items-center gap-4">
+          <div class="text-4xl">📘</div>
+          <div>
+            <div class="font-black text-lg md:text-xl mb-1">تابع مسابقاتنا الكبرى على فيسبوك</div>
+            <div class="text-sm text-blue-100">واربح جوائز قيمة! اضغط للمتابعة الآن</div>
+          </div>
+        </div>
+      </a>
+
+      <a href="https://wa.me/201110109388" target="_blank" class="block bg-gradient-to-l from-[#25D366] to-[#128C4A] rounded-3xl p-6 md:p-8 text-white shadow-xl hover:scale-[1.02] transition-all relative overflow-hidden">
+        <div class="flex items-center gap-4 relative">
+          <div class="text-4xl">💬</div>
+          <div>
+            <div class="font-black text-lg md:text-xl mb-1 flex items-center gap-2">
+              دليفري سريع عبر واتساب
+              <span class="relative flex h-3 w-3">
+                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
+                <span class="relative inline-flex rounded-full h-3 w-3 bg-white"></span>
+              </span>
+            </div>
+            <div class="text-sm text-green-100" dir="ltr">01110109388</div>
+          </div>
+        </div>
+      </a>
+
+      <div class="grid grid-cols-2 gap-4">
+        <a href="tel:01110109388" class="bg-white dark:bg-brand-charCard border border-stone-200 dark:border-stone-800 rounded-2xl p-5 text-center hover:border-brand-gold/40 transition-all">
+          <div class="text-2xl mb-1">📞</div>
+          <div class="text-xs font-bold" dir="ltr">01110109388</div>
+        </a>
+        <a href="tel:01062947982" class="bg-white dark:bg-brand-charCard border border-stone-200 dark:border-stone-800 rounded-2xl p-5 text-center hover:border-brand-gold/40 transition-all">
+          <div class="text-2xl mb-1">📞</div>
+          <div class="text-xs font-bold" dir="ltr">01062947982</div>
+        </a>
+      </div>
+
+      <div class="bg-white dark:bg-brand-charCard border border-stone-200 dark:border-stone-800 rounded-2xl p-5 flex items-start gap-3">
+        <div class="text-2xl">📍</div>
+        <div class="text-sm text-stone-600 dark:text-stone-300 leading-relaxed">
+          طريق شنشور سمادون، على بعد 150 متر من كوبري النعمانية
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= استمارة الطلب ================= -->
+<section class="py-16 md:py-24 bg-brand-cream dark:bg-brand-charCard/40 border-t border-stone-200/40 dark:border-stone-800/50" id="order">
+  <div class="max-w-3xl mx-auto px-6">
+    <div class="text-center mb-10 md:mb-12">
+      <span class="text-brand-ember dark:text-brand-gold font-bold text-sm uppercase tracking-widest block mb-2">اطلب الآن</span>
+      <h2 class="text-3xl md:text-5xl font-extrabold text-stone-900 dark:text-white mb-2">اطلب دليفري من الأمير</h2>
+      <div class="w-16 h-1 bg-gradient-to-l from-brand-ember to-brand-gold mx-auto rounded-full"></div>
+    </div>
+
+    <form id="orderForm" onsubmit="handleOrderSubmit(event)" class="bg-white dark:bg-brand-charCard border border-stone-200 dark:border-stone-800 rounded-3xl p-6 md:p-12 shadow-2xl space-y-6">
+      <div>
+        <label class="block text-sm font-bold mb-2 text-stone-700 dark:text-stone-300">
+          الاسم الكامل <span class="text-brand-ember">*</span>
+        </label>
+        <input type="text" id="order-name" required placeholder="اكتب اسمك الكامل هنا..."
+          class="w-full p-4 rounded-xl border-2 border-stone-300 dark:border-stone-700 bg-stone-50 dark:bg-stone-800 text-stone-900 dark:text-white focus:outline-none focus:border-brand-gold text-base transition-all">
+      </div>
+
+      <div>
+        <label class="block text-sm font-bold mb-2 text-stone-700 dark:text-stone-300">
+          رقم الموبايل <span class="text-brand-ember">*</span>
+        </label>
+        <input type="tel" id="order-phone" required placeholder="01xxxxxxxxx"
+          class="w-full p-4 rounded-xl border-2 border-stone-300 dark:border-stone-700 bg-stone-50 dark:bg-stone-800 text-stone-900 dark:text-white focus:outline-none focus:border-brand-gold text-base transition-all">
+      </div>
+
+      <div>
+        <label class="block text-sm font-bold mb-2 text-stone-700 dark:text-stone-300">عنوان التوصيل <span class="text-brand-ember">*</span></label>
+        <input type="text" id="order-address" required placeholder="الحي / الشارع / علامة مميزة..."
+          class="w-full p-4 rounded-xl border-2 border-stone-300 dark:border-stone-700 bg-stone-50 dark:bg-stone-800 text-stone-900 dark:text-white focus:outline-none focus:border-brand-gold text-base transition-all">
+      </div>
+
+      <div>
+        <label class="block text-sm font-bold mb-2 text-stone-700 dark:text-stone-300">اختر الأصناف المطلوبة: <span class="text-brand-ember">*</span></label>
+        <div id="order-items-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-2 max-h-72 overflow-y-auto pl-1"></div>
+      </div>
+
+      <div>
+        <label class="block text-sm font-bold mb-2 text-stone-700 dark:text-stone-300">ملاحظات خاصة (بدون بصل، حار زيادة...)</label>
+        <textarea id="order-details" placeholder="اكتب أي طلبات أو تعليمات خاصة هنا..." class="w-full h-28 p-4 rounded-xl border-2 border-stone-300 dark:border-stone-700 bg-stone-50 dark:bg-stone-800 text-stone-900 dark:text-white focus:outline-none focus:border-brand-gold text-base resize-none transition-all"></textarea>
+      </div>
+
+      <p class="text-stone-400 text-xs text-center leading-relaxed">
+        عند نقرك على زر الإرسال، سيتم تجهيز رسالة طلب منظمة وفتح واتساب مباشرة مع فريق الشيف أمير لتأكيد الطلب والتوصيل.
+      </p>
+
+      <button type="submit" class="w-full bg-gradient-to-l from-brand-ember to-brand-emberBright hover:brightness-110 text-white font-extrabold py-4 rounded-xl text-lg transition-all hover:scale-[1.02] shadow-ember flex items-center justify-center gap-3">
+        <span>📨 إرسال الطلب عبر واتساب</span>
+      </button>
+    </form>
+  </div>
+</section>
+
+<!-- ================= الفوتر ================= -->
+<footer class="bg-brand-char text-stone-400 py-12 text-center text-sm relative overflow-hidden">
+  <div class="seal-mark absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 w-96 h-96 opacity-[0.03]"></div>
+  <div class="max-w-7xl mx-auto px-6 space-y-5 relative">
+    <div class="flex items-center justify-center gap-2.5">
+      <img src="assets/images/logo.png" alt="شعار مطعم الأمير" class="w-11 h-11 rounded-full object-cover border-2 border-brand-gold/50" onerror="this.style.display='none'">
+      <span class="text-xl font-black text-white">مطعم <span class="gold-text">الأمير</span></span>
+    </div>
+    <p class="max-w-md mx-auto leading-relaxed">تحت إدارة الشيف أمير بدر والشيف محمد بدر — علامة الجودة في كل طبق.</p>
+    <div class="flex items-center justify-center gap-4 text-xs">
+      <a href="tel:01110109388" class="hover:text-brand-gold transition-colors" dir="ltr">01110109388</a>
+      <span>•</span>
+      <a href="tel:01062947982" class="hover:text-brand-gold transition-colors" dir="ltr">01062947982</a>
+      <span>•</span>
+      <a href="https://www.facebook.com/share/1HydJE6VF9/" target="_blank" class="hover:text-brand-gold transition-colors">فيسبوك</a>
+    </div>
+    <div class="w-16 h-px bg-stone-700 mx-auto"></div>
+    <p class="text-xs">جميع الحقوق محفوظة لدى karam - للتواصل والدعم الفني: <a href="tel:01014403294" class="text-brand-gold hover:underline">01014403294</a></p>
+  </div>
+</footer>
+
+<script>
+/* ==================================================================
+   بيانات المنيو الكاملة — مطعم الأمير
+   category: grills | tajines | meals | trays | sandwiches | pizza | feteer | crepe | potato | appetizers
+   ================================================================== */
+const MENU = [
+  /* ---------------- المشويات ---------------- */
+  {cat:'grills', name:'كباب شامي', img:'grills.jpg', badge:'hot', prices:[{l:'ربع',v:190},{l:'نص',v:380},{l:'كيلو',v:760}]},
+  {cat:'grills', name:'كبده شامي', img:'grills.jpg', prices:[{l:'ربع',v:190},{l:'نص',v:380},{l:'كيلو',v:760}]},
+  {cat:'grills', name:'طرب شامي', img:'grills.jpg', prices:[{l:'ربع',v:170},{l:'نص',v:230},{l:'كيلو',v:400}]},
+  {cat:'grills', name:'كفته ضاني', img:'grills.jpg', badge:'hot', prices:[{l:'ربع',v:105},{l:'نص',v:260},{l:'كيلو',v:400}]},
+  {cat:'grills', name:'ليفه ضاني', img:'grills.jpg', prices:[{l:'ربع',v:105},{l:'نص',v:350},{l:'كيلو',v:700}]},
+  {cat:'grills', name:'مشكل كباب + كفته', img:'grills.jpg', badge:'hot', prices:[{l:'ربع',v:150},{l:'نص',v:290},{l:'كيلو',v:380}]},
+  {cat:'grills', name:'مشكل طرب + كفته', img:'grills.jpg', prices:[{l:'ربع',v:110},{l:'نص',v:215},{l:'كيلو',v:430}]},
+  {cat:'grills', name:'موزة ضاني', img:'grills.jpg', prices:[{l:'قطعة',v:140}]},
+  {cat:'grills', name:'ورقة لحمة', img:'grills.jpg', prices:[{l:'ربع',v:70},{l:'نص',v:130},{l:'كيلو',v:260}]},
+  {cat:'grills', name:'فرخة شيش', img:'grills.jpg', prices:[{l:'ربع',v:90},{l:'نص',v:170},{l:'كيلو',v:340}]},
+  {cat:'grills', name:'فرخة تكا', img:'grills.jpg', prices:[{l:'ربع',v:95},{l:'نص',v:175},{l:'كيلو',v:350}]},
+  {cat:'grills', name:'فرد حمام', img:'grills.jpg', prices:[{l:'فرد',v:140}]},
+  {cat:'grills', name:'كيلو ممبار', img:'grills.jpg', prices:[{l:'كيلو',v:260}]},
+  {cat:'grills', name:'كيلو سجق', img:'grills.jpg', prices:[{l:'كيلو',v:430}]},
+  {cat:'grills', name:'كيلو شيش طاووق', img:'grills.jpg', badge:'hot', prices:[{l:'كيلو',v:430}]},
+
+  /* ---------------- قسم المطبخ (طواجن وأرز) ---------------- */
+  {cat:'tajines', name:'طاجن خضار باللحمة', img:'kitchen.jpg', desc:'يقدم مع طبق أرز بسمتي', prices:[{l:'السعر',v:165}]},
+  {cat:'tajines', name:'طاجن بطاطس باللحمة', img:'kitchen.jpg', desc:'يقدم مع طبق أرز بسمتي', prices:[{l:'السعر',v:165}]},
+  {cat:'tajines', name:'طاجن بامية باللحمة', img:'kitchen.jpg', desc:'يقدم مع طبق أرز بسمتي', prices:[{l:'السعر',v:165}]},
+  {cat:'tajines', name:'طاجن كوارج بلدي', img:'kitchen.jpg', desc:'يقدم مع طبق أرز بسمتي', prices:[{l:'السعر',v:170}]},
+  {cat:'tajines', name:'طاجن مكرونة نجرسكو', img:'kitchen.jpg', prices:[{l:'السعر',v:105}]},
+  {cat:'tajines', name:'طاجن مكرولة بشاميل', img:'kitchen.jpg', prices:[{l:'السعر',v:150}]},
+  {cat:'tajines', name:'طبق ورق عنب', img:'kitchen.jpg', badge:'fresh', prices:[{l:'السعر',v:110}]},
+  {cat:'tajines', name:'طبق سمبوسة لحمه', img:'kitchen.jpg', prices:[{l:'السعر',v:80}]},
+  {cat:'tajines', name:'طبق أرز بسمتي', img:'kitchen.jpg', prices:[{l:'السعر',v:80}]},
+  {cat:'tajines', name:'طبق أرز بالخلطة', img:'kitchen.jpg', prices:[{l:'السعر',v:25}]},
+  {cat:'tajines', name:'شربة كوارع', img:'kitchen.jpg', prices:[{l:'السعر',v:70}]},
+  {cat:'tajines', name:'شربة حمام', img:'kitchen.jpg', prices:[{l:'السعر',v:95}]},
+
+  /* ---------------- الوجبات ---------------- */
+  {cat:'meals', name:'ربع فرخة + قطعة كفته + عيش وسلطات', img:'meals.jpg', prices:[{l:'السعر',v:115}]},
+  {cat:'meals', name:'ربع فرخة + ثمن كفته + عيش وسلطات', img:'meals.jpg', prices:[{l:'السعر',v:150}]},
+  {cat:'meals', name:'ربع فرخة + ثمن كفته ضاني + عيش وسلطات', img:'meals.jpg', prices:[{l:'السعر',v:190}]},
+  {cat:'meals', name:'ربع كباب + ثمن كفته ضاني + عيش وسلطات', img:'meals.jpg', badge:'hot', prices:[{l:'السعر',v:250}]},
+  {cat:'meals', name:'ربع كباب + ثمن طرب ضاني + عيش وسلطات', img:'meals.jpg', prices:[{l:'السعر',v:250}]},
+  {cat:'meals', name:'ثلث كفته ضاني + ثمن طرب ضاني + ممبار + عيش وسلطات', img:'meals.jpg', prices:[{l:'السعر',v:220}]},
+  {cat:'meals', name:'ثمن كفته ضاني + ثمن طرب ضاني + سجق + عيش وسلطات', img:'meals.jpg', prices:[{l:'السعر',v:180}]},
+  {cat:'meals', name:'ربع شيش طاووق + ثمن كفته + عيش وسلطات', img:'meals.jpg', badge:'hot', prices:[{l:'السعر',v:235}]},
+
+  /* ---------------- الصواني ---------------- */
+  {cat:'trays', name:'صينية: نص كباب + نص كفته + نص طرب + ممبار', img:'trays.jpg', desc:'حواوشي ٢ + أرز بسمتي + طبق ورق عنب', badge:'hot', prices:[{l:'السعر',v:1180}]},
+  {cat:'trays', name:'صينية: فرخة + نص كفته + نص طرب + ممبار', img:'trays.jpg', desc:'٤ حواوشي + أرز بسمتي', prices:[{l:'السعر',v:990}]},
+  {cat:'trays', name:'صينية: نص كباب + نص كفته + نص طرب + ٥ فرد حمام', img:'trays.jpg', desc:'أرز بسمتي + طبق ورق عنب + طبق سيمبوسة', prices:[{l:'السعر',v:1580}]},
+  {cat:'trays', name:'صينية: ربع فرخة + ربع كفته + ربع طرب + ممبار', img:'trays.jpg', desc:'٣ حواوشي + أرز بسمتي + طبق ورق عنب', prices:[{l:'السعر',v:640}]},
+
+  /* ---------------- السندوتشات والحواوشي ---------------- */
+  {cat:'sandwiches', name:'سندوتش كفته كبير', img:'sandwiches.jpg', prices:[{l:'السعر',v:30}]},
+  {cat:'sandwiches', name:'سندوتش كفته صغير', img:'sandwiches.jpg', prices:[{l:'السعر',v:25}]},
+  {cat:'sandwiches', name:'سندوتش طرب', img:'sandwiches.jpg', prices:[{l:'السعر',v:60}]},
+  {cat:'sandwiches', name:'حواوشي ضاني', img:'hawawshi.jpg', badge:'hot', prices:[{l:'السعر',v:45}]},
+  {cat:'sandwiches', name:'حواوشي كبير', img:'hawawshi.jpg', prices:[{l:'السعر',v:30}]},
+  {cat:'sandwiches', name:'حواوشي صغير', img:'hawawshi.jpg', prices:[{l:'السعر',v:25}]},
+  {cat:'sandwiches', name:'حواوشي وش بيتزا', img:'hawawshi.jpg', badge:'hot', prices:[{l:'السعر',v:75}]},
+
+  /* ---------------- البيتزا الايطالي ---------------- */
+  {cat:'pizza', name:'مارجريتا', img:'pizza.jpg', badge:'fresh', prices:[{l:'صغير',v:75},{l:'وسط',v:90},{l:'كبير',v:105}]},
+  {cat:'pizza', name:'ميكس جبن', img:'pizza.jpg', prices:[{l:'صغير',v:80},{l:'وسط',v:95},{l:'كبير',v:110}]},
+  {cat:'pizza', name:'سوسيس', img:'pizza.jpg', prices:[{l:'صغير',v:70},{l:'وسط',v:90},{l:'كبير',v:110}]},
+  {cat:'pizza', name:'لحمة مفرومة', img:'pizza.jpg', prices:[{l:'صغير',v:80},{l:'وسط',v:100},{l:'كبير',v:120}]},
+  {cat:'pizza', name:'فاهيتا فراخ', img:'pizza.jpg', prices:[{l:'صغير',v:90},{l:'وسط',v:110},{l:'كبير',v:130}]},
+  {cat:'pizza', name:'تشكن باربكيو', img:'pizza.jpg', prices:[{l:'صغير',v:90},{l:'وسط',v:110},{l:'كبير',v:130}]},
+  {cat:'pizza', name:'تشكن رانش', img:'pizza.jpg', prices:[{l:'صغير',v:90},{l:'وسط',v:110},{l:'كبير',v:130}]},
+  {cat:'pizza', name:'ميكس لحوم', img:'pizza.jpg', prices:[{l:'صغير',v:90},{l:'وسط',v:110},{l:'كبير',v:130}]},
+  {cat:'pizza', name:'شاورما فراخ', img:'pizza.jpg', badge:'hot', prices:[{l:'صغير',v:85},{l:'وسط',v:105},{l:'كبير',v:125}]},
+  {cat:'pizza', name:'شيش', img:'pizza.jpg', prices:[{l:'صغير',v:85},{l:'وسط',v:115},{l:'كبير',v:125}]},
+  {cat:'pizza', name:'ميكس فراخ', img:'pizza.jpg', prices:[{l:'صغير',v:90},{l:'وسط',v:110},{l:'كبير',v:130}]},
+  {cat:'pizza', name:'ميكس الأمير لحوم + فراخ', img:'pizza.jpg', badge:'hot', prices:[{l:'صغير',v:100},{l:'وسط',v:120},{l:'كبير',v:140}]},
+
+  /* ---------------- فطير حلو ---------------- */
+  {cat:'feteer', name:'فطيرة سكر ولبن', img:'feteer-sweet.jpg', prices:[{l:'صغير',v:50},{l:'كبير',v:80}]},
+  {cat:'feteer', name:'فطيرة كاستر', img:'feteer-sweet.jpg', prices:[{l:'صغير',v:55},{l:'كبير',v:85}]},
+  {cat:'feteer', name:'فطيرة بسبوسة وكنافة', img:'feteer-sweet.jpg', prices:[{l:'صغير',v:65},{l:'كبير',v:105}]},
+  {cat:'feteer', name:'فطيرة شيكولاتة', img:'feteer-sweet.jpg', badge:'hot', prices:[{l:'صغير',v:80},{l:'كبير',v:125}]},
+  {cat:'feteer', name:'فطيرة لوتس', img:'feteer-sweet.jpg', badge:'hot', prices:[{l:'صغير',v:85},{l:'كبير',v:130}]},
+  {cat:'feteer', name:'فطيرة شيكولاتة + لوتس', img:'feteer-sweet.jpg', badge:'hot', prices:[{l:'صغير',v:90},{l:'كبير',v:140}]},
+  {cat:'feteer', name:'فطيرة قشطة وعسل', img:'feteer-sweet.jpg', prices:[{l:'صغير',v:85},{l:'كبير',v:140}]},
+  {cat:'feteer', name:'فطيرة مكسرات', img:'feteer-sweet.jpg', prices:[{l:'صغير',v:100},{l:'كبير',v:140}]},
+  {cat:'feteer', name:'فطيرة ليلة الدخلة', img:'feteer-sweet.jpg', badge:'hot', prices:[{l:'صغير',v:120},{l:'كبير',v:150}]},
+  {cat:'feteer', name:'فطيرة الأمير', img:'feteer-sweet.jpg', badge:'hot', prices:[{l:'صغير',v:120},{l:'كبير',v:160}]},
+
+  /* ---------------- فطير حادق ---------------- */
+  {cat:'feteer', name:'فطيرة رومي', img:'feteer-savory.jpg', prices:[{l:'صغير',v:90},{l:'كبير',v:115}]},
+  {cat:'feteer', name:'فطيرة مكس جبن', img:'feteer-savory.jpg', prices:[{l:'صغير',v:110},{l:'كبير',v:145}]},
+  {cat:'feteer', name:'فطيرة سجق', img:'feteer-savory.jpg', prices:[{l:'صغير',v:95},{l:'كبير',v:125}]},
+  {cat:'feteer', name:'فطيرة لحمة', img:'feteer-savory.jpg', prices:[{l:'صغير',v:105},{l:'كبير',v:135}]},
+  {cat:'feteer', name:'فطيرة سلامي', img:'feteer-savory.jpg', prices:[{l:'صغير',v:105},{l:'كبير',v:140}]},
+  {cat:'feteer', name:'فطيرة سوسيس', img:'feteer-savory.jpg', prices:[{l:'صغير',v:95},{l:'كبير',v:125}]},
+  {cat:'feteer', name:'فطيرة فراخ', img:'feteer-savory.jpg', prices:[{l:'صغير',v:110},{l:'كبير',v:140}]},
+  {cat:'feteer', name:'فطيرة استربس', img:'feteer-savory.jpg', prices:[{l:'صغير',v:120},{l:'كبير',v:140}]},
+  {cat:'feteer', name:'فطيرة بانيه', img:'feteer-savory.jpg', prices:[{l:'صغير',v:100},{l:'كبير',v:120}]},
+  {cat:'feteer', name:'فطيرة سجق + لحمة', img:'feteer-savory.jpg', badge:'hot', prices:[{l:'صغير',v:130},{l:'كبير',v:150}]},
+  {cat:'feteer', name:'فطيرة مكس فراخ لحوم', img:'feteer-savory.jpg', badge:'hot', prices:[{l:'صغير',v:130},{l:'كبير',v:160}]},
+  {cat:'feteer', name:'فطيرة مكس الأمير', img:'feteer-savory.jpg', badge:'hot', prices:[{l:'صغير',v:150},{l:'كبير',v:185}]},
+
+  /* ---------------- كريب الجبن ---------------- */
+  {cat:'crepe', name:'كريب بطاطس', img:'crepe-cheese.jpg', prices:[{l:'وش',v:40},{l:'جبنة',v:55}]},
+  {cat:'crepe', name:'كريب بطاطس موتزاريلا', img:'crepe-cheese.jpg', prices:[{l:'وش',v:40},{l:'جبنة',v:55}]},
+  {cat:'crepe', name:'كريب ميكس جبن', img:'crepe-cheese.jpg', prices:[{l:'وش',v:40},{l:'جبنة',v:55}]},
+
+  /* ---------------- كريب اللحوم ---------------- */
+  {cat:'crepe', name:'كريب الأمير', img:'crepe-meat.jpg', desc:'تحفة طاني', badge:'hot', prices:[{l:'وش',v:80},{l:'جبنة',v:100}]},
+  {cat:'crepe', name:'كريب سوسيس', img:'crepe-meat.jpg', prices:[{l:'وش',v:60},{l:'جبنة',v:80}]},
+  {cat:'crepe', name:'كريب لحمة مفرومة', img:'crepe-meat.jpg', prices:[{l:'وش',v:70},{l:'جبنة',v:90}]},
+  {cat:'crepe', name:'كريب فاهيتا لحمة', img:'crepe-meat.jpg', prices:[{l:'وش',v:80},{l:'جبنة',v:100}]},
+
+  /* ---------------- كريب الفراخ ---------------- */
+  {cat:'crepe', name:'كريب بانيه', img:'crepe-chicken.jpg', prices:[{l:'وش',v:65},{l:'جبنة',v:85}]},
+  {cat:'crepe', name:'كريب كرسبي', img:'crepe-chicken.jpg', badge:'hot', prices:[{l:'وش',v:65},{l:'جبنة',v:85}]},
+  {cat:'crepe', name:'كريب زنجر حار', img:'crepe-chicken.jpg', badge:'hot', prices:[{l:'وش',v:75},{l:'جبنة',v:95}]},
+  {cat:'crepe', name:'كريب استربس', img:'crepe-chicken.jpg', prices:[{l:'وش',v:75},{l:'جبنة',v:95}]},
+  {cat:'crepe', name:'كريب شيش طاووق', img:'crepe-chicken.jpg', prices:[{l:'وش',v:75},{l:'جبنة',v:95}]},
+  {cat:'crepe', name:'كريب شاورما فراخ', img:'crepe-chicken.jpg', badge:'hot', prices:[{l:'وش',v:75},{l:'جبنة',v:95}]},
+  {cat:'crepe', name:'كريب فاهيتا فراخ', img:'crepe-chicken.jpg', prices:[{l:'وش',v:85},{l:'جبنة',v:100}]},
+  {cat:'crepe', name:'سوبر كريب كرنشي', img:'crepe-chicken.jpg', badge:'hot', prices:[{l:'وش',v:80},{l:'جبنة',v:100}]},
+
+  /* ---------------- ميكسات البطاطس ---------------- */
+  {cat:'potato', name:'كريسبي + بطاطس', img:'potato-mix.jpg', prices:[{l:'وش',v:80},{l:'جبنة',v:100}]},
+  {cat:'potato', name:'زنجر + بطاطس', img:'potato-mix.jpg', badge:'hot', prices:[{l:'وش',v:90},{l:'جبنة',v:110}]},
+  {cat:'potato', name:'شاورما + بطاطس', img:'potato-mix.jpg', prices:[{l:'وش',v:90},{l:'جبنة',v:110}]},
+  {cat:'potato', name:'بانيه + بطاطس', img:'potato-mix.jpg', prices:[{l:'وش',v:80},{l:'جبنة',v:100}]},
+
+  /* ---------------- قسم الميكسات (فطير مقلي) ---------------- */
+  {cat:'crepe', name:'ميكس فراخ (مقلي)', img:'crepe-mix.jpg', prices:[{l:'جبنة',v:85},{l:'وش',v:105}]},
+  {cat:'crepe', name:'ميكس لحوم (مقلي)', img:'crepe-mix.jpg', prices:[{l:'جبنة',v:80},{l:'وش',v:100}]},
+  {cat:'crepe', name:'سوبر ميكس الأمير (مقلي)', img:'crepe-mix.jpg', badge:'hot', prices:[{l:'جبنة',v:95},{l:'وش',v:115}]},
+
+  /* ---------------- المقبلات ---------------- */
+  {cat:'appetizers', name:'باكيت بطاطس', img:'appetizers.jpg', prices:[{l:'السعر',v:15}]},
+  {cat:'appetizers', name:'علبة رانش', img:'appetizers.jpg', prices:[{l:'السعر',v:15}]},
+  {cat:'appetizers', name:'علبة باربكيو', img:'appetizers.jpg', prices:[{l:'السعر',v:15}]},
+  {cat:'appetizers', name:'بطاطس صوص شيدر', img:'appetizers.jpg', prices:[{l:'السعر',v:25}]},
+
+  /* ---------------- الإضافات ---------------- */
+  {cat:'appetizers', name:'إضافة لحوم', img:'extras.jpg', prices:[{l:'السعر',v:30}]},
+  {cat:'appetizers', name:'إضافة فراخ', img:'extras.jpg', prices:[{l:'السعر',v:30}]},
+  {cat:'appetizers', name:'إضافة مشروم', img:'extras.jpg', prices:[{l:'السعر',v:15}]},
+  {cat:'appetizers', name:'إضافة جبن', img:'extras.jpg', prices:[{l:'السعر',v:20}]},
+  {cat:'appetizers', name:'إضافة بطاطس', img:'extras.jpg', prices:[{l:'السعر',v:15}]},
+  {cat:'appetizers', name:'إضافة رانش', img:'extras.jpg', prices:[{l:'السعر',v:15}]},
+  {cat:'appetizers', name:'إضافة شيدر', img:'extras.jpg', prices:[{l:'السعر',v:15}]},
+];
+
+const CAT_LABELS = {
+  grills:'مشويات', tajines:'مطبخ', meals:'وجبة', trays:'صينية', sandwiches:'سندوتش',
+  pizza:'بيتزا', feteer:'فطير', crepe:'كريب', potato:'ميكس بطاطس', appetizers:'مقبلات'
+};
+
+const BADGE_MAP = {
+  hot: {label:'الأكثر مبيعاً 🔥', cls:'badge-hot text-white'},
+  spicy: {label:'سبايسي 🌶️', cls:'bg-orange-600 text-white'},
+  fresh: {label:'طازج 🌿', cls:'bg-emerald-600 text-white'},
+};
+
+const FALLBACK_IMG = 'https://images.unsplash.com/photo-1544025162-d76694265947?w=500&q=80';
+
+function priceHTML(prices){
+  if(prices.length === 1){
+    return `<span class="font-black text-brand-ember dark:text-brand-goldBright text-lg">${prices[0].v} ج.م</span>`;
+  }
+  return prices.map(p => `
+    <div class="flex flex-col items-center bg-stone-50 dark:bg-stone-800/60 rounded-lg px-2.5 py-1.5 min-w-[58px]">
+      <span class="text-[10px] text-stone-500 dark:text-stone-400">${p.l}</span>
+      <span class="font-black text-brand-ember dark:text-brand-goldBright text-sm">${p.v}</span>
+    </div>`).join('');
+}
+
+function renderMenu(filter){
+  const grid = document.getElementById('menu-grid');
+  const items = filter === 'all' ? MENU : MENU.filter(i => i.cat === filter);
+  grid.innerHTML = items.map((item, idx) => {
+    const badge = item.badge ? BADGE_MAP[item.badge] : null;
+    return `
+    <div class="menu-card bg-white dark:bg-brand-charCard border border-stone-200 dark:border-stone-800/80 rounded-3xl overflow-hidden hover:-translate-y-1.5 transition-all group" style="opacity:0; transform:scale(.95); animation: cardIn .4s ease forwards; animation-delay:${Math.min(idx*30,300)}ms;">
+      <div class="relative h-44 overflow-hidden">
+        <img src="assets/images/${item.img}" alt="${item.name}" loading="lazy" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" onerror="this.src='${FALLBACK_IMG}'">
+        <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"></div>
+        ${badge ? `<span class="absolute top-3 right-3 text-[11px] font-bold px-2.5 py-1 rounded-full ${badge.cls} shadow-md">${badge.label}</span>` : ''}
+        <span class="absolute bottom-3 left-3 text-[10px] font-bold px-2.5 py-1 rounded-full bg-black/50 text-white backdrop-blur-sm">${CAT_LABELS[item.cat]}</span>
+      </div>
+      <div class="p-4 md:p-5">
+        <h4 class="font-extrabold text-base md:text-lg text-stone-900 dark:text-white mb-1.5 leading-snug">${item.name}</h4>
+        ${item.desc ? `<p class="text-xs text-stone-500 dark:text-stone-400 mb-3 leading-relaxed">${item.desc}</p>` : '<div class="mb-3"></div>'}
+        <div class="flex items-center gap-2 flex-wrap">${priceHTML(item.prices)}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function filterMenu(cat, ev){
+  document.querySelectorAll('.menu-filter-btn').forEach(btn => {
+    btn.classList.remove('active','bg-gradient-to-l','from-brand-ember','to-brand-emberBright','text-white','shadow-md');
+    btn.classList.add('bg-white','dark:bg-brand-charCard','border','border-stone-200','dark:border-stone-800','font-semibold');
+  });
+  if(ev && ev.currentTarget){
+    const b = ev.currentTarget;
+    b.classList.remove('bg-white','dark:bg-brand-charCard','border','border-stone-200','dark:border-stone-800','font-semibold');
+    b.classList.add('active','bg-gradient-to-l','from-brand-ember','to-brand-emberBright','text-white','shadow-md');
+  }
+  renderMenu(cat);
+}
+
+/* بناء قائمة الأصناف في نموذج الطلب */
+function renderOrderItems(){
+  const wrap = document.getElementById('order-items-grid');
+  wrap.innerHTML = MENU.map(item => {
+    const priceLabel = item.prices.length === 1 ? `${item.prices[0].v} ج.م` : item.prices.map(p=>`${p.l} ${p.v}`).join(' / ');
+    return `
+    <label class="flex items-center gap-3 bg-stone-50 dark:bg-stone-800 p-3.5 rounded-xl border border-stone-200 dark:border-stone-800 cursor-pointer select-none hover:border-brand-gold/40 transition-all">
+      <input type="checkbox" value="${item.name} (${priceLabel})" class="w-5 h-5 accent-brand-ember rounded shrink-0">
+      <span class="text-xs md:text-sm font-semibold leading-tight">${item.name} <span class="text-brand-ember dark:text-brand-goldBright font-bold">${priceLabel}</span></span>
+    </label>`;
+  }).join('');
+}
+
+/* ================= شاشة التحميل ================= */
+window.addEventListener('load', () => {
+  const loader = document.getElementById('loader');
+  renderMenu('all');
+  renderOrderItems();
+  setTimeout(() => {
+    loader.classList.add('opacity-0');
+    setTimeout(() => {
+      loader.classList.add('hidden');
+      checkVisitorName();
+    }, 500);
+  }, 1400);
+});
+
+/* ================= إدارة اسم الزائر ================= */
+function checkVisitorName(){
+  const savedName = localStorage.getItem('amir_visitor_name');
+  if(savedName){
+    applyPersonalizedGreeting(savedName);
+  } else {
+    const modal = document.getElementById('welcome-modal');
+    modal.classList.remove('hidden');
+    setTimeout(() => { document.getElementById('visitor-name-input').focus(); }, 300);
+  }
+}
+
+function saveVisitorName(){
+  const nameInput = document.getElementById('visitor-name-input').value.trim();
+  if(!nameInput){
+    showToast('يرجى كتابة اسمك لنتمكن من الترحيب بك!');
+    const inputEl = document.getElementById('visitor-name-input');
+    inputEl.focus();
+    inputEl.style.borderColor = '#B3241C';
+    setTimeout(() => { inputEl.style.borderColor = ''; }, 1200);
+    return;
+  }
+  localStorage.setItem('amir_visitor_name', nameInput);
+  applyPersonalizedGreeting(nameInput);
+  closeWelcomeModal();
+}
+
+function skipWelcomeModal(){
+  const defaultName = 'زائرنا الكريم';
+  localStorage.setItem('amir_visitor_name', defaultName);
+  applyPersonalizedGreeting(defaultName);
+  closeWelcomeModal();
+}
+
+function closeWelcomeModal(){
+  const modal = document.getElementById('welcome-modal');
+  modal.classList.add('opacity-0');
+  setTimeout(() => { modal.classList.add('hidden'); }, 500);
+}
+
+function applyPersonalizedGreeting(name){
+  const headerBadge = document.getElementById('header-user-badge');
+  const mobileBadge = document.getElementById('mobile-user-badge');
+  const heroBadge = document.getElementById('hero-welcome-badge');
+  const orderNameField = document.getElementById('order-name');
+
+  const isDefault = name === 'زائرنا الكريم';
+  const greetHero = isDefault ? 'مرحباً بالزوار الكرام في مطعم الأمير' : `مرحباً بك يا ${name} في مطعم الأمير! 👋`;
+
+  if(headerBadge){
+    headerBadge.innerHTML = `مرحباً، <span class="font-extrabold">${name}</span> 👋`;
+    headerBadge.classList.remove('hidden');
+  }
+  if(mobileBadge){
+    mobileBadge.innerHTML = `مرحباً، <span class="font-extrabold">${name}</span> 👋`;
+    mobileBadge.classList.remove('hidden');
+  }
+  if(heroBadge){
+    heroBadge.innerHTML = `<span>${greetHero}</span>`;
+  }
+  if(orderNameField && !isDefault){
+    orderNameField.value = name;
+    orderNameField.style.borderColor = '#C9A24B';
+    orderNameField.style.backgroundColor = 'rgba(201,162,75,0.06)';
+    setTimeout(() => {
+      orderNameField.style.borderColor = '';
+      orderNameField.style.backgroundColor = '';
+    }, 2000);
+  }
+}
+
+/* ================= التنبيهات ================= */
+function showToast(message){
+  const toast = document.getElementById('custom-toast');
+  const toastMsg = document.getElementById('toast-message');
+  toastMsg.innerText = message;
+  toast.classList.remove('opacity-0','-translate-y-20','pointer-events-none');
+  setTimeout(() => {
+    toast.classList.add('opacity-0','-translate-y-20','pointer-events-none');
+  }, 4000);
+}
+
+/* ================= الثيم ================= */
+function toggleTheme(){
+  const html = document.documentElement;
+  if(html.classList.contains('dark')){
+    html.classList.remove('dark');
+    localStorage.setItem('amir_theme','light');
+  } else {
+    html.classList.add('dark');
+    localStorage.setItem('amir_theme','dark');
+  }
+}
+(function initTheme(){
+  const saved = localStorage.getItem('amir_theme');
+  if(saved === 'light'){ document.documentElement.classList.remove('dark'); }
+  else { document.documentElement.classList.add('dark'); }
+})();
+
+/* ================= قائمة الجوال ================= */
+function toggleMobileMenu(){
+  document.getElementById('mobile-menu').classList.toggle('hidden');
+}
+
+/* ================= استمارة الطلب ================= */
+function handleOrderSubmit(e){
+  e.preventDefault();
+  const name = document.getElementById('order-name').value.trim();
+  const phone = document.getElementById('order-phone').value.trim();
+  const address = document.getElementById('order-address').value.trim();
+  const details = document.getElementById('order-details').value.trim();
+  const selected = document.querySelectorAll('#orderForm input[type="checkbox"]:checked');
+
+  if(!name || !phone || !address){
+    showToast('من فضلك، أكمل بيانات الاسم والموبايل والعنوان أولاً!');
+    return;
+  }
+  if(selected.length === 0){
+    showToast('من فضلك، اختر صنف واحد على الأقل لإتمام الطلب!');
+    return;
+  }
+
+  let itemsList = '';
+  selected.forEach((cb, i) => { itemsList += `${i+1}. ${cb.value}%0A`; });
+
+  const message = `مرحباً مطعم الأمير 👋%0A%0Aوصلني طلب جديد من الموقع الإلكتروني:%0A%0A👤 *الاسم:* ${name}%0A📱 *الموبايل:* ${phone}%0A📍 *العنوان:* ${address}%0A%0A🍽️ *الأصناف المطلوبة:*%0A${itemsList}%0A📝 *ملاحظات:*%0A${details ? details : 'لا توجد ملاحظات'}%0A%0A*برجاء تأكيد الطلب وميعاد التوصيل.*`;
+
+  window.open(`https://wa.me/201110109388?text=${message}`, '_blank');
+  showToast('تم تجهيز طلبك.. جاري فتح واتساب لتأكيده! ✅');
+}
+
+document.addEventListener('keydown', function(e){
+  const modal = document.getElementById('welcome-modal');
+  if(!modal.classList.contains('hidden') && e.key === 'Enter'){
+    e.preventDefault();
+    saveVisitorName();
+  }
+});
+</script>
+
+<style>
+@keyframes cardIn { to { opacity:1; transform:scale(1); } }
+</style>
+
+</body>
+</html>
