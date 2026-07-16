@@ -12,7 +12,7 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&family=Marhey:wght@400;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&family=Marhey:wght@400;600;700&family=Tajawal:wght@300;400;700;800;900&family=IBM+Plex+Sans+Arabic:wght@400;500&family=Amiri:wght@400;700&family=Aref+Ruqaa:wght@400;700&family=Almarai:wght@400;700;800&family=Zain:wght@400;700;800&family=Alexandria:wght@400;600;700&family=Readex+Pro:wght@400;500&display=swap" rel="stylesheet">
 
 <script src="https://cdn.tailwindcss.com"></script>
 <script>
@@ -23,6 +23,14 @@
         fontFamily: {
           cairo: ['Cairo', 'sans-serif'],
           marhey: ['Marhey', 'sans-serif'],
+          tajawal: ['Tajawal', 'sans-serif'],
+          plexArabic: ['IBM Plex Sans Arabic', 'sans-serif'],
+          amiri: ['Amiri', 'serif'],
+          arefRuqaa: ['Aref Ruqaa', 'serif'],
+          almarai: ['Almarai', 'sans-serif'],
+          zain: ['Zain', 'sans-serif'],
+          alexandria: ['Alexandria', 'sans-serif'],
+          readex: ['Readex Pro', 'sans-serif'],
         },
         colors: {
           brand: {
@@ -36,6 +44,17 @@
             cream: '#FBF4E8',
             creamCard: '#FFFFFF',
             creamBg: '#F4ECDC',
+            burntOrange: '#CC5500',
+            charcoalMenu: '#222222',
+            menuCream: '#FDFBF7',
+            dishName: '#1A1A1A',
+            priceGold: '#B8860B',
+            descGray: '#666666',
+            oliveDark: '#2C3522',
+            aboutTitle: '#F5F5DC',
+            aboutText: '#E0E0E0',
+            footerCharcoal: '#2B2C30',
+            footerText: '#A9A9A9',
           }
         },
         boxShadow: {
@@ -178,11 +197,11 @@
       نحن لا ندعي الجودة<span class="text-brand-gold">..</span><br class="hidden md:block">
       <span class="gold-text">بل نصنعها</span>
     </h1>
-    <p class="text-base md:text-xl text-stone-200 leading-relaxed max-w-2xl mx-auto mb-10 font-light">
+    <p class="font-plexArabic font-normal text-base md:text-xl text-stone-200 leading-relaxed max-w-2xl mx-auto mb-10">
       تحت إدارة الشيف <strong class="text-brand-goldBright font-bold">أمير بدر</strong> والشيف <strong class="text-brand-goldBright font-bold">محمد بدر</strong> — مشويات على الفحم، طواجن بيتي، بيتزا وكريب وفطير طازج، وصواني عائلية.
     </p>
     <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
-      <a href="#menu" class="w-full sm:w-auto bg-gradient-to-l from-brand-gold to-brand-goldBright hover:brightness-110 text-black font-bold px-8 py-4 rounded-full text-lg shadow-gold hover:scale-105 active:scale-95 transition-all">📋 تصفح المنيو واطلب الآن</a>
+      <a href="#menu" class="w-full sm:w-auto bg-brand-burntOrange hover:brightness-110 text-white font-bold px-8 py-4 rounded-full text-lg shadow-gold hover:scale-105 active:scale-95 transition-all">📋 تصفح المنيو واطلب الآن</a>
       <button onclick="openCallModal()" class="w-full sm:w-auto bg-white/10 border border-white/25 hover:bg-white/20 text-white font-bold px-8 py-4 rounded-full text-lg transition-all hover:scale-105 backdrop-blur-sm">📞 اتصل بينا</button>
     </div>
   </div>
@@ -203,10 +222,10 @@
           </div>
         </div>
       </div>
-      <div class="lg:col-span-7 order-1 lg:order-2 text-center lg:text-right">
+      <div class="lg:col-span-7 order-1 lg:order-2 text-center lg:text-right bg-brand-oliveDark rounded-[2rem] p-7 md:p-10">
         <span class="text-brand-ember font-bold text-sm uppercase tracking-widest block mb-2">من نحن</span>
-        <h2 class="text-3xl md:text-5xl font-extrabold text-stone-900 mb-6">الشيف أمير.. علامة الجودة</h2>
-        <div class="space-y-5 text-base md:text-lg text-stone-600 leading-relaxed">
+        <h2 class="font-arefRuqaa font-bold text-3xl md:text-5xl text-brand-aboutTitle mb-6">الشيف أمير.. علامة الجودة</h2>
+        <div class="font-cairo font-normal space-y-5 text-base md:text-lg text-brand-aboutText leading-relaxed">
           <p>مطعم الأمير تحت إدارة الشيف <strong class="text-brand-ember">أمير بدر</strong> والشيف <strong class="text-brand-ember">محمد بدر</strong>، وجهتك لأشهى المشويات والطواجن والوجبات البيتي في أجواء نظيفة واحترافية بالكامل.</p>
           <p>جودة الأكل، وأجود أنواع الخامات الطازجة، ونظافة تامة في كل خطوة من خطوات التحضير.. هذه أولويتنا القصوى قبل أي شيء آخر.</p>
         </div>
@@ -222,7 +241,7 @@
 </section>
 
 <!-- ================= المنيو ================= -->
-<section class="py-16 md:py-24 max-w-7xl mx-auto px-4 md:px-6 relative" id="menu">
+<section class="py-16 md:py-24 max-w-7xl mx-auto px-4 md:px-6 relative bg-brand-menuCream" id="menu">
   <div class="text-center max-w-3xl mx-auto mb-10 md:mb-12">
     <span class="text-brand-ember font-bold text-sm uppercase tracking-widest block mb-2">قائمتنا الكاملة</span>
     <h2 class="text-3xl md:text-5xl font-extrabold text-stone-900 mb-2">المنيو</h2>
@@ -272,8 +291,8 @@
 </section>
 
 <!-- ================= الفوتر ================= -->
-<footer class="bg-brand-char text-stone-400 py-12 text-center text-sm relative overflow-hidden">
-  <div class="seal-mark absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 w-96 h-96 opacity-[0.03]"></div>
+<footer class="font-zain bg-brand-footerCharcoal text-brand-footerText py-12 text-center text-sm relative overflow-hidden">
+  <div class="seal-mark absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 w-96 h-96 opacity-10"></div>
   <div class="max-w-7xl mx-auto px-6 space-y-5 relative">
     <div class="flex items-center justify-center gap-2.5">
       <img src="assets/images/logo.png" alt="شعار مطعم الأمير" class="w-11 h-11 rounded-full object-cover border-2 border-brand-gold/50" onerror="this.style.display='none'">
@@ -281,9 +300,9 @@
     </div>
     <p class="max-w-md mx-auto leading-relaxed">تحت إدارة الشيف أمير بدر والشيف محمد بدر — علامة الجودة في كل طبق.</p>
     <div class="flex items-center justify-center gap-4 text-xs">
-      <a href="tel:01110109388" class="hover:text-brand-gold transition-colors" dir="ltr">01110109388</a>
+      <a href="tel:01110109388" class="hover:text-brand-burntOrange transition-colors" dir="ltr">01110109388</a>
       <span>•</span>
-      <a href="tel:01062947982" class="hover:text-brand-gold transition-colors" dir="ltr">01062947982</a>
+      <a href="tel:01062947982" class="hover:text-brand-burntOrange transition-colors" dir="ltr">01062947982</a>
     </div>
   </div>
 </footer>
@@ -589,8 +608,8 @@ function cleanItemName(name){
 }
 
 function priceLabelHTML(prices){
-  if(prices.length === 1) return `<span class="font-black text-brand-ember text-lg">${prices[0].v} ج.م</span>`;
-  return `<span class="text-xs text-stone-500">${prices.length} أحجام متاحة — من ${prices[prices.length-1].v} ج.م</span>`;
+  if(prices.length === 1) return `<span class="font-black text-brand-priceGold text-lg">${prices[0].v} ج.م</span>`;
+  return `<span class="text-xs text-brand-priceGold font-bold">${prices.length} أحجام متاحة — من ${prices[prices.length-1].v} ج.م</span>`;
 }
 
 function buildItemCard(item, idx){
@@ -598,8 +617,8 @@ function buildItemCard(item, idx){
   return `
     <div onclick="openItemModal(${item.id})" class="menu-card bg-white border border-stone-200 rounded-2xl p-5 cursor-pointer hover:-translate-y-1 transition-all relative" style="opacity:0; transform:scale(.95); animation: cardIn .35s ease forwards; animation-delay:${Math.min(idx*20,260)}ms;">
       ${badge ? `<span class="absolute top-3 left-3 text-[10px] font-bold px-2.5 py-1 rounded-full ${badge.cls} shadow-md">${badge.label}</span>` : ''}
-      <h4 class="font-extrabold text-base md:text-lg text-stone-900 mb-1.5 leading-snug pl-2">${cleanItemName(item.name)}</h4>
-      ${item.desc ? `<p class="text-xs text-stone-500 mb-3 leading-relaxed">${item.desc}</p>` : '<div class="mb-3"></div>'}
+      <h4 class="font-almarai font-bold text-base md:text-lg text-brand-dishName mb-1.5 leading-snug pl-2">${cleanItemName(item.name)}</h4>
+      ${item.desc ? `<p class="font-tajawal font-light text-xs text-brand-descGray mb-3 leading-relaxed">${item.desc}</p>` : '<div class="mb-3"></div>'}
       <div class="flex items-center justify-between">
         ${priceLabelHTML(item.prices)}
         <span class="bg-brand-ember/10 text-brand-ember font-bold text-xs px-3 py-1.5 rounded-full">+ إضافة</span>
@@ -611,7 +630,7 @@ function categorySectionHTML(catKey, items, showReturnBtn){
   const label = CAT_LABELS[catKey];
   return `
     <div class="mb-14" id="cat-section-${catKey}">
-      <h3 class="text-2xl md:text-3xl font-extrabold text-stone-900 mb-5 flex items-center gap-2">${label.emoji} ${label.name}</h3>
+      <h3 class="font-arefRuqaa font-bold text-2xl md:text-3xl text-stone-900 mb-5 flex items-center gap-2">${label.emoji} ${label.name}</h3>
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
         ${items.map((item, idx) => buildItemCard(item, idx)).join('')}
       </div>
