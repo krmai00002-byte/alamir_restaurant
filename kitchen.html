@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#12100D">
+<title>شاشة الكاشير | مطعم الأمير</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = { theme: { extend: { fontFamily: { cairo:['Cairo','sans-serif'] },
+    colors: { brand: { ember:'#B3241C', emberBright:'#E23B24', gold:'#C9A24B', goldBright:'#E4C572', char:'#12100D', charCard:'#1C1815' } } } } }
+</script>
+
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+
+<style>
+  body{ font-family:'Cairo',sans-serif; }
+  @keyframes newOrderPulse{ 0%,100%{ box-shadow:0 0 0 0 rgba(226,59,36,0.5);} 50%{ box-shadow:0 0 0 14px rgba(226,59,36,0);} }
+  .order-new{ animation:newOrderPulse 1.6s ease-out 3; }
+  ::-webkit-scrollbar{ width:10px; } ::-webkit-scrollbar-thumb{ background:#C9A24B55; border-radius:10px; }
+</style>
+</head>
+<body class="bg-brand-char text-stone-100 min-h-screen">
+
+<!-- ================= شاشة PIN ================= -->
+<div id="pin-screen" class="fixed inset-0 z-[999] bg-brand-char flex items-center justify-center px-6">
+  <div class="bg-brand-charCard border border-brand-gold/30 rounded-3xl p-8 max-w-sm w-full text-center shadow-2xl">
+    <div class="text-5xl mb-3">👑🔒</div>
+    <h1 class="text-2xl font-black mb-2">شاشة الكاشير</h1>
+    <p class="text-stone-400 text-sm mb-6">مطعم الأمير — أدخل الرقم السري للدخول</p>
+    <input type="password" id="pin-input" inputmode="numeric" maxlength="6" placeholder="••••"
+      class="w-full text-center text-2xl tracking-[0.5em] p-4 rounded-2xl border-2 border-stone-700 bg-stone-900 text-white focus:outline-none focus:border-brand-gold mb-4">
+    <button onclick="checkPin()" class="w-full bg-gradient-to-l from-brand-gold to-brand-goldBright text-black font-bold py-3.5 rounded-xl">دخول</button>
+    <p id="pin-error" class="text-brand-emberBright text-sm mt-3 hidden">الرقم السري غير صحيح</p>
+  </div>
+</div>
+
+<!-- ================= الشاشة الرئيسية ================= -->
+<div id="main-screen" class="hidden">
+  <header class="sticky top-0 z-40 bg-brand-charCard/95 backdrop-blur border-b border-stone-800 px-4 md:px-8 py-4 flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <span class="text-2xl">👑</span>
+      <h1 class="text-lg md:text-2xl font-black">شاشة الكاشير — مطعم الأمير</h1>
+    </div>
+    <div class="flex items-center gap-3">
+      <span id="connection-status" class="text-xs font-bold px-3 py-1.5 rounded-full bg-emerald-600/20 text-emerald-400">🟢 متصل</span>
+      <span class="text-xs md:text-sm font-bold bg-brand-ember/20 text-brand-emberBright px-3 py-1.5 rounded-full">الطلبات الجديدة: <span id="orders-count">0</span></span>
+    </div>
+  </header>
+
+  <main class="max-w-5xl mx-auto px-4 md:px-8 py-8">
+    <div id="empty-state" class="text-center py-24 text-stone-500">
+      <div class="text-6xl mb-4">🍽️</div>
+      <p class="text-lg font-bold">لا توجد طلبات جديدة حاليًا</p>
+      <p class="text-sm mt-1">هتظهر هنا فور وصول أي طلب جديد من الموقع</p>
+    </div>
+    <div id="orders-list" class="space-y-5"></div>
+  </main>
+</div>
+
+<script>
+/* ===================== إعدادات ===================== */
+const CASHIER_PIN = "1234"; // غيّر الرقم السري هنا قبل الاستخدام الفعلي
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAL23ZA4BJFzgdvJKP-tj0woyAq-toheb4",
+  authDomain: "restaurant-650ce.firebaseapp.com",
+  databaseURL: "https://restaurant-650ce-default-rtdb.firebaseio.com",
+  projectId: "restaurant-650ce",
+  storageBucket: "restaurant-650ce.firebasestorage.app",
+  messagingSenderId: "1063086454308",
+  appId: "1:1063086454308:web:459c488b9f1a5ab0afcab1"
+};
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+
+let ordersMap = {};
+let initialLoadDone = false;
+let listenerAttached = false;
+
+/* ===================== PIN ===================== */
+function checkPin(){
+  const input = document.getElementById('pin-input').value.trim();
+  if(input === CASHIER_PIN){
+    document.getElementById('pin-screen').classList.add('hidden');
+    document.getElementById('main-screen').classList.remove('hidden');
+    requestNotificationPermission();
+    firebase.auth().signInAnonymously()
+      .then(() => attachOrdersListener())
+      .catch((err) => {
+        console.error('فشل تسجيل الدخول:', err);
+        attachOrdersListener();
+      });
+  } else {
+    document.getElementById('pin-error').classList.remove('hidden');
+    document.getElementById('pin-input').value = '';
+  }
+}
+document.getElementById('pin-input').addEventListener('keydown', (e) => { if(e.key === 'Enter') checkPin(); });
+
+/* ===================== إشعارات المتصفح ===================== */
+function requestNotificationPermission(){
+  if('Notification' in window && Notification.permission === 'default'){
+    Notification.requestPermission();
+  }
+}
+function notifyNewOrder(order){
+  if('Notification' in window && Notification.permission === 'granted'){
+    new Notification('🔔 طلب جديد - مطعم الأمير', {
+      body: `${order.customerName} — ${order.total} ج.م`,
+    });
+  }
+}
+
+/* ===================== صوت التنبيه (بدون ملف خارجي) ===================== */
+function playBeep(){
+  try{
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    [0, 0.18, 0.36].forEach((delay) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.value = 880;
+      gain.gain.setValueAtTime(0.25, ctx.currentTime + delay);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + delay + 0.15);
+      osc.connect(gain).connect(ctx.destination);
+      osc.start(ctx.currentTime + delay);
+      osc.stop(ctx.currentTime + delay + 0.16);
+    });
+  } catch(e){ console.warn('تعذر تشغيل الصوت', e); }
+}
+
+/* ===================== الاستماع اللحظي للطلبات ===================== */
+function attachOrdersListener(){
+  if(listenerAttached) return;
+  listenerAttached = true;
+  const query = db.ref('orders').orderByChild('status').equalTo('جديد');
+
+  query.on('value', (snapshot) => {
+    const newOrdersMap = {};
+    snapshot.forEach((child) => {
+      newOrdersMap[child.key] = { id: child.key, ...child.val() };
+    });
+
+    if(initialLoadDone){
+      // أي مفتاح جديد مش موجود قبل كده = طلب وصل بعد فتح الشاشة
+      Object.keys(newOrdersMap).forEach((key) => {
+        if(!ordersMap[key]){
+          playBeep();
+          notifyNewOrder(newOrdersMap[key]);
+        }
+      });
+    }
+
+    ordersMap = newOrdersMap;
+    renderOrders();
+    if(!initialLoadDone) initialLoadDone = true;
+  }, (error) => {
+    console.error(error);
+    document.getElementById('connection-status').innerText = '🔴 خطأ في الاتصال';
+    document.getElementById('connection-status').className = 'text-xs font-bold px-3 py-1.5 rounded-full bg-red-600/20 text-red-400';
+  });
+}
+
+/* ===================== عرض الطلبات ===================== */
+function renderOrders(){
+  const list = Object.values(ordersMap).sort((a,b) => (a.timestamp||0) - (b.timestamp||0));
+  document.getElementById('orders-count').innerText = list.length;
+  document.getElementById('empty-state').classList.toggle('hidden', list.length > 0);
+
+  const container = document.getElementById('orders-list');
+  container.innerHTML = list.map((order) => {
+    const time = order.timestamp ? new Date(order.timestamp).toLocaleTimeString('ar-EG', {hour:'2-digit', minute:'2-digit'}) : '--';
+    const itemsHTML = (order.items || []).map(it => `
+      <div class="flex justify-between text-sm border-b border-stone-800 py-1.5">
+        <span>${it.name}${it.weight && it.weight !== 'السعر' ? ' — ' + it.weight : ''} × ${it.qty}</span>
+        <span class="font-bold text-brand-goldBright">${it.subtotal} ج.م</span>
+      </div>`).join('');
+
+    return `
+    <div class="bg-brand-charCard border border-stone-800 rounded-2xl p-5 md:p-6" data-order-id="${order.id}">
+      <div class="flex flex-wrap items-start justify-between gap-3 mb-4">
+        <div>
+          <div class="font-black text-lg">${order.customerName || 'بدون اسم'}</div>
+          <div class="text-stone-400 text-sm" dir="ltr">${order.phone || ''}</div>
+        </div>
+        <div class="text-left">
+          <div class="text-xs text-stone-500">وقت الطلب</div>
+          <div class="font-bold">${time}</div>
+        </div>
+      </div>
+
+      <div class="flex flex-wrap gap-2 mb-4 text-xs">
+        <span class="bg-stone-800 px-3 py-1.5 rounded-full font-bold">${order.orderType === 'delivery' ? '🛵 دليفري' : '🏠 استلام من المطعم'}</span>
+        ${order.address ? `<span class="bg-stone-800 px-3 py-1.5 rounded-full">📍 ${order.address}</span>` : ''}
+      </div>
+
+      <div class="bg-stone-900/50 rounded-xl p-3 mb-4">${itemsHTML || '<p class="text-stone-500 text-sm">لا توجد أصناف</p>'}</div>
+
+      ${order.notes ? `<div class="text-sm text-stone-300 bg-stone-800/60 rounded-xl p-3 mb-4">📝 ${order.notes}</div>` : ''}
+
+      <div class="flex items-center justify-between border-t border-stone-800 pt-4">
+        <div class="font-black text-xl text-brand-goldBright">الإجمالي: ${order.total} ج.م</div>
+        <div class="flex gap-2">
+          <button onclick="printOrder('${order.id}')" class="bg-stone-700 hover:bg-stone-600 font-bold px-4 py-2.5 rounded-xl text-sm">🖨️ طباعة</button>
+          <button onclick="markDone('${order.id}')" class="bg-emerald-600 hover:bg-emerald-500 font-bold px-4 py-2.5 rounded-xl text-sm">✅ تم التنفيذ</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+/* ===================== تم التنفيذ ===================== */
+function markDone(orderId){
+  db.ref('orders/' + orderId).update({ status: 'تم', completedAt: firebase.database.ServerValue.TIMESTAMP })
+    .catch((err) => console.error(err));
+}
+
+/* ===================== طباعة الفيش ===================== */
+function printOrder(orderId){
+  const order = ordersMap[orderId];
+  if(!order) return;
+  const time = order.timestamp ? new Date(order.timestamp).toLocaleString('ar-EG') : '--';
+  const itemsRows = (order.items || []).map(it => `
+    <tr>
+      <td style="padding:4px 0;">${it.name}${it.weight && it.weight !== 'السعر' ? ' - ' + it.weight : ''}</td>
+      <td style="text-align:center;">${it.qty}</td>
+      <td style="text-align:left;">${it.subtotal} ج.م</td>
+    </tr>`).join('');
+
+  const receiptHTML = `
+  <html dir="rtl" lang="ar"><head><meta charset="UTF-8"><title>فيش طلب</title>
+  <style>
+    body{ font-family:'Cairo', Arial, sans-serif; padding:20px; width:280px; }
+    h2{ text-align:center; margin:0 0 4px; }
+    .center{ text-align:center; }
+    table{ width:100%; border-collapse:collapse; margin-top:10px; font-size:13px; }
+    hr{ border:none; border-top:1px dashed #333; margin:10px 0; }
+    .total{ font-weight:bold; font-size:16px; display:flex; justify-content:space-between; margin-top:8px; }
+  </style></head>
+  <body>
+    <h2>👑 مطعم الأمير</h2>
+    <p class="center">فيش طلب</p>
+    <hr>
+    <p><b>الاسم:</b> ${order.customerName || ''}</p>
+    <p><b>الموبايل:</b> ${order.phone || ''}</p>
+    <p><b>النوع:</b> ${order.orderType === 'delivery' ? 'دليفري' : 'استلام من المطعم'}</p>
+    ${order.address ? `<p><b>العنوان:</b> ${order.address}</p>` : ''}
+    <p><b>الوقت:</b> ${time}</p>
+    <hr>
+    <table>
+      <thead><tr><th style="text-align:right;">الصنف</th><th>الكمية</th><th style="text-align:left;">السعر</th></tr></thead>
+      <tbody>${itemsRows}</tbody>
+    </table>
+    <hr>
+    ${order.notes ? `<p><b>ملاحظات:</b> ${order.notes}</p>` : ''}
+    <div class="total"><span>الإجمالي</span><span>${order.total} ج.م</span></div>
+    <p class="center" style="margin-top:14px;">شكرًا لطلبكم من مطعم الأمير 👑</p>
+    <script>window.onload = () => { window.print(); }<\/script>
+  </body></html>`;
+
+  const printWin = window.open('', '_blank', 'width=380,height=600');
+  printWin.document.write(receiptHTML);
+  printWin.document.close();
+}
+</script>
+</body>
+</html>
